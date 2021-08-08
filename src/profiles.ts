@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { BaseTabComponent, NewTabParameters, PartialProfile, Profile, ProfileProvider } from 'tabby-core'
 import { DockerTabComponent } from './components/dockerTab.component'
 import { DockerProfileSettingsComponent } from './components/dockerProfileSettings.component'
-import { DockerService } from './services/docker.service'
+import { Container, DockerService } from './services/docker.service'
 
 export interface DockerProfileOptions {
     containerID?: string
@@ -36,7 +36,13 @@ export class DockerProfileProvider extends ProfileProvider<DockerProfile> {
     }
 
     async getBuiltinProfiles (): Promise<PartialProfile<DockerProfile>[]> {
-        const containers = await this.docker.listContainers()
+        let containers: Container[]
+        try {
+            containers = await this.docker.listContainers()
+        } catch (e) {
+            console.error('Could not load Docker containers:', e)
+            return []
+        }
         return [
             ...containers.map(container => ({
                 id: `docker:container-${container.id}`,
