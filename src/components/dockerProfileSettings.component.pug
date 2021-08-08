@@ -1,0 +1,48 @@
+.form-line
+    .header
+        .title Start mode
+        .description Whether to launch a new container
+
+    .btn-group(
+        [(ngModel)]='startMode',
+        (ngModelChange)='updateStartMode()',
+        ngbRadioGroup
+    )
+        label.btn.btn-secondary(ngbButtonLabel)
+            input(
+                type='radio',
+                ngbButton,
+                [value]='"image"'
+            )
+            | New container
+        label.btn.btn-secondary(ngbButtonLabel)
+            input(
+                type='radio',
+                ngbButton,
+                [value]='"container"'
+            )
+            | Attach
+
+.form-group(*ngIf='startMode === "container"')
+    label Container
+    select.form-control(
+        [(ngModel)]='profile.options.containerName',
+        (ngModelChange)='clearContainerID()'
+    )
+        option([value]='container.names[0]', *ngFor='let container of containers') {{container.names[0]}}
+
+.form-group(*ngIf='startMode === "image"')
+    label Image
+    .input-group.flex-nowrap
+        .input-group-text.flex-grow-1.no-wrap {{ getImageDescription() }}
+        .input-group-append.flex-shrink-0
+            button.btn.btn-secondary((click)='pickImage()')
+                i.fab.fa-docker
+                span Select
+
+.form-group
+    label Command
+    input.form-control.text-monospace(
+        type='text',
+        [(ngModel)]='profile.options.command'
+    )
