@@ -47,7 +47,7 @@ export class DockerProfileProvider extends ProfileProvider<DockerProfile> {
             ...containers.map(container => ({
                 id: `docker:container-${container.id}`,
                 type: 'docker',
-                name: container.names[0],
+                name: container.names[0] + (container.image ? ` (${container.image})` : ''),
                 isBuiltin: true,
                 icon: 'fab fa-docker',
                 options: {
