@@ -36,7 +36,6 @@ module.exports = {
   externals: [
     'fs',
     'ngx-toastr',
-    'dockerode',
     'util',
     /^rxjs/,
     /^@angular/,
