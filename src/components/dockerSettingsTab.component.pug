@@ -1,0 +1,32 @@
+h3 Docker
+
+.form-line
+    .header
+        .title(translate) Docker socket path
+    input.form-control(
+        type='text',
+        [(ngModel)]='config.store.docker.socket',
+        (ngModelChange)='config.save()'
+    )
+
+.form-line
+    .header
+        .title(translate) Docker host
+    input.form-control(
+        type='text',
+        [(ngModel)]='config.store.docker.host',
+        (ngModelChange)='config.save()'
+    )
+
+.form-line
+    .header
+        .title(translate) Docker port
+    input.form-control(
+        type='number',
+        [(ngModel)]='config.store.docker.port',
+        (ngModelChange)='config.save()'
+    )
+
+.alert.alert-info Set a socket path or a host and a port, or leave blank to use the defaults.
+
+.alert.alert-success(*ngIf='connected') Connected

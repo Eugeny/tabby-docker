@@ -4,7 +4,7 @@ import Docker, { ImageInfo } from 'dockerode'
 import { Injectable } from '@angular/core'
 import { Observable, Subject } from 'rxjs'
 import type { Duplex } from 'stream'
-import { Logger, LogService } from 'tabby-core'
+import { ConfigService, Logger, LogService } from 'tabby-core'
 
 export interface Container {
     id: string
@@ -77,7 +77,7 @@ export class DockerProcess {
 export class DockerService {
     logger: Logger
 
-    constructor (log: LogService) {
+    constructor (log: LogService, private config: ConfigService) {
         this.logger = log.create('docker')
     }
 
@@ -150,7 +150,17 @@ export class DockerService {
     }
 
     private getDocker (): Docker {
-        return new Docker()
+        let opts: any = {}
+        if (this.config.store.docker.socket) {
+            opts.socketPath = this.config.store.docker.socket
+        }
+        if (this.config.store.docker.host) {
+            opts.host = this.config.store.docker.host
+        }
+        if (this.config.store.docker.port) {
+            opts.port = this.config.store.docker.port
+        }
+        return new Docker(opts)
     }
 
 }
